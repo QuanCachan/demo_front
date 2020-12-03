@@ -1,6 +1,6 @@
 <template>
   <div class="list row">
-    <div class="col-md-8">
+<!--    <div class="col-md-8">
       <div class="input-group mb-3">
         <label>
           <input type="text" class="form-control" placeholder="Search by title"
@@ -14,7 +14,7 @@
           </button>
         </div>
       </div>
-    </div>
+    </div>-->
     <div class="col-md-6">
       <h4>Inventory List</h4>
       <ul class="list-group">
@@ -28,13 +28,10 @@
         </li>
       </ul>
 
-      <button class="m-3 btn btn-sm btn-danger" @click="removeAllInventories">
-        Remove All
-      </button>
     </div>
     <div class="col-md-6">
       <div v-if="currentInventory">
-        <h4>Tutorial</h4>
+        <h4>Inventory</h4>
         <div>
           <label><strong>Name:</strong></label> {{ currentInventory.name }}
         </div>
@@ -85,12 +82,6 @@ export default {
       this.retrieveInventories();
       this.currentInventory = null;
       this.currentIndex = -1;
-    },
-    removeAllInventories() {
-      this.refreshList();
-    },
-    searchTitle() {
-
     }
   },
   mounted() {
