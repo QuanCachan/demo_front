@@ -1,20 +1,5 @@
 <template>
   <div class="list row">
-<!--    <div class="col-md-8">
-      <div class="input-group mb-3">
-        <label>
-          <input type="text" class="form-control" placeholder="Search by title"
-                 v-model="title"/>
-        </label>
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="button"
-                  @click="searchTitle"
-          >
-            Search
-          </button>
-        </div>
-      </div>
-    </div>-->
     <div class="col-md-6">
       <h4>Inventory List</h4>
       <ul class="list-group">
@@ -22,12 +7,10 @@
             :class="{ active: index === currentIndex }"
             v-for="(inventory, index) in inventories"
             :key="index"
-            @click="setActiveInventory(inventory, index)"
-        >
+            @click="setActiveInventory(inventory, index)">
           {{ inventory.name }}
         </li>
       </ul>
-
     </div>
     <div class="col-md-6">
       <div v-if="currentInventory">
@@ -37,8 +20,7 @@
         </div>
 
         <a class="badge badge-warning"
-           :href="'/inventories/' + currentInventory.id"
-        >
+           :href="'/inventories/' + currentInventory.id">
           Edit
         </a>
       </div>
@@ -67,11 +49,11 @@ export default {
     retrieveInventories() {
       InventoryDataService.getAll()
           .then(response => {
-            console.log("step 1: ", response.data);
             this.inventories = response.data;
           })
           .catch(e => {
-            console.log("step 2: ", e)
+            console.log("step 2: ", e);
+            //TODO: ERROR popup
           })
     },
     setActiveInventory(inventory, index) {
