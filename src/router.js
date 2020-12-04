@@ -8,19 +8,24 @@ export default new Router({
     routes: [
         {
             path: "/",
-            alias: "/inventories",
-            name: "inventories",
-            component: () => import("./components/InventoryList")
+            alias: "/stock",
+            name: "stock",
+            component: () => import("./components/stock/Stock")
         },
-        /*{
-            path: "/inventories/:id",
-            name: "inventories-details",
-            component: () => import("./components/Inventory")
+        {
+            path: "/products",
+            name: "products",
+            component: () => import("./components/product/ProductList")
+        },
+        {
+            path: "/inventories",
+            name: "inventories",
+            component: () => import("./components/inventory/InventoryList")
         },
         {
             path: "/login",
             name: "login",
-            component: () => import("./components/Authentication")
-        }*/
+            component: () => import("./components/login/Authentication")
+        }
     ]
 })

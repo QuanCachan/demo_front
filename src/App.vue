@@ -4,7 +4,10 @@
       <router-link to="/" class="navbar-brand">GestioStock Home Page</router-link>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
-          <router-link to="/tutorials" class="nav-link">Inventories</router-link>
+          <router-link to="/products" class="nav-link">Products</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/inventories" class="nav-link">Inventories</router-link>
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">Login</router-link>
