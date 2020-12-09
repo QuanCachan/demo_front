@@ -2,6 +2,16 @@
   <div class="list row">
     <div class="col-md-6">
       <h4>Inventory List</h4>
+      <ag-grid-vue 
+                   style="width: 250px; height: 200px;"
+                   class="ag-theme-alpine"
+                   rowSelection="single"
+                  :gridOptions="gridOptions"
+                   :columnDefs="columnDefs"
+                   :rowData="inventories"
+                   @cell-clicked="onCellClicked"
+                   >
+      </ag-grid-vue>
       <ul class="list-group">
         <li
           class="list-group-item"
@@ -39,7 +49,7 @@
                       {{ zone.createdDate }} <br />
                       <a
                         class="badge badge-warning"
-                        :href="'/zones/' + currentInventory.id"
+                        :href="'/zones/' + zone.id"
                       >
                         Edit
                       </a>
@@ -81,16 +91,24 @@
 <script>
 import InventoryDataService from "@/services/InventoryDataService";
 import ZoneDataService from "@/services/ZoneDataService";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import {AgGridVue} from 'ag-grid-vue';
 
 export default {
-  name: "inventory-list",
+  name: "inventories",
   data() {
     return {
+      gridOptions: null,
+      gridApi: null,
       inventories: [],
       currentInventory: null,
       currentIndex: -1,
       title: "",
     };
+  },
+  components: {
+    AgGridVue
   },
   computed: {
     currentInventoryZones() {
@@ -98,6 +116,11 @@ export default {
     },
   },
   methods: {
+    onCellClicked(){  
+       let selectedNodes = this.gridApi.getSelectedNodes();
+      let selectedData = selectedNodes.map(node => node.data);
+      alert(`Selected Nodes:\n${JSON.stringify(selectedData)}`);
+    },
     retrieveInventories() {
       InventoryDataService.getAll()
         .then((response) => {
@@ -160,7 +183,24 @@ export default {
       this.currentIndex = -1;
     },
   },
+  beforeMount() {
+     this.gridOptions = {};
+    this.columnDefs = [
+      {
+        headerName: 'Name',
+        field: 'name',
+        filter: true,
+        cellRendererParams: {
+          clicked: function(field) {
+            alert(`${field} was clicked`);
+          }
+        }
+      }
+    ];
+  },
   mounted() {
+    this.gridApi = this.gridOptions.api;
+
     this.retrieveInventories();
   },
 };
