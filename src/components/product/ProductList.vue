@@ -15,7 +15,13 @@
     </div>
     <div class="col-md-6">
       <h4>Product List</h4>
-      <ul class="list-group">
+      <ag-grid-vue :grid-options="gridOptions"
+                   style="width: 800px; height: 600px;"
+                   class="ag-theme-alpine"
+                   :columnDefs="columnDefs"
+                   :rowData="products">
+      </ag-grid-vue>
+<!--      <ul class="list-group">
         <li class="list-group-item"
             :class="{ active: index === currentIndex }"
             v-for="(product, index) in products"
@@ -23,9 +29,9 @@
             @click="setActiveProduct(product, index)">
           {{ product.name }}
         </li>
-      </ul>
+      </ul>-->
     </div>
-    <div class="col-md-6">
+<!--    <div class="col-md-6">
       <div v-if="currentProduct">
         <h4>Product</h4>
         <div>
@@ -56,11 +62,15 @@
           <label><strong>Attachment:</strong></label> {{ currentProduct.attachment }}
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 
 </template>
 <script>
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import {AgGridVue} from 'ag-grid-vue';
+import "ag-grid-enterprise";
 import ProductDataService from "@/services/ProductDataService";
 
 export default {
@@ -70,8 +80,58 @@ export default {
       products: [],
       currentProduct: null,
       currentIndex: -1,
-      name: ""
+      name: "",
+      columnDefs: null,
+      gridOptions: {
+        debug: false,
+        defaultColDef: {
+          enableValue: true,
+          enableRowGroup: true,
+          enablePivot: true,
+          editable: false, // currently
+          filterParams: {
+            applyButton: false,
+            clearButton: false,
+            suppressAndOrCondition: true
+          }
+        },
+        sideBar: {
+          defaultToolPanel: "columns",
+          toolPanels: [
+            {
+              id: "columns",
+              labelDefault: "Columns",
+              labelKey: "columns",
+              iconKey: "columns",
+              toolPanel: "agColumnsToolPanel"
+            },
+            {
+              id: "filters",
+              labelKey: "filters",
+              labelDefault: "Filters",
+              iconKey: "menu",
+              toolPanel: "agFiltersToolPanel"
+            }
+          ]
+        },
+        rowModelType: "clientSide",
+        suppressAggFuncInHeader: true,
+        suppressPropertyNamesCheck: true,
+        rowGroupPanelShow: "always",
+        enableSorting: true,
+        // showToolPanel: true,
+        enableColResize: true,
+        enableFilter: true,
+        floatingFilter: true,
+        enableRangeSelection: true,
+        getContextMenuItems: this.getContextMenuItems,
+        allowContextMenuWithControlKey: true
+        //rowData: this.result.response.gridData
+      }
     };
+  },
+  components: {
+    AgGridVue
   },
   methods: {
     retrieveProducts() {
@@ -91,6 +151,25 @@ export default {
       this.currentProduct = product;
       this.currentIndex = index;
     },
+  },
+  beforeMount() {
+    this.columnDefs = [
+      {
+        headerName: 'Name',
+        field: 'name',
+        filter: true
+      },
+      {
+        headerName: 'Reference',
+        field: 'reference',
+        filter: true
+      },
+      {
+        headerName: 'Physical State',
+        field: 'physicalState',
+        filter: true
+      }
+    ];
   },
   mounted() {
     this.retrieveProducts();
