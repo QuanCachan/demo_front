@@ -2,27 +2,16 @@
   <div class="list row">
     <div class="col-md-6">
       <h4>Inventory List</h4>
-      <ag-grid-vue 
-                   style="width: 250px; height: 200px;"
-                   class="ag-theme-alpine"
-                   rowSelection="single"
-                  :gridOptions="gridOptions"
-                   :columnDefs="columnDefs"
-                   :rowData="inventories"
-                   @cell-clicked="onCellClicked"
-                   >
+      <ag-grid-vue
+        style="width: 250px; height: 200px"
+        class="ag-theme-alpine"
+        rowSelection="single"
+        :gridOptions="inventoryGridOptions"
+        :columnDefs="columnDefs"
+        :rowData="inventories"
+        @cell-clicked="onInventoryCellClicked"
+      >
       </ag-grid-vue>
-      <ul class="list-group">
-        <li
-          class="list-group-item"
-          :class="{ active: index === currentIndex }"
-          v-for="(inventory, index) in inventories"
-          :key="index"
-          @click="setActiveInventory(inventory, index)"
-        >
-          {{ inventory.name }}
-        </li>
-      </ul>
     </div>
     <div class="col-md-6">
       <div v-if="currentInventory">
@@ -39,7 +28,7 @@
                   <label><strong>Created date:</strong></label>
                   {{ currentInventory.createdDate }} <br />
                   <div v-if="currentInventory.zones">
-                    <div
+                    <!--<div
                       class="list-group-item"
                       v-for="(zone, index) in currentInventoryZones"
                       :key="index"
@@ -59,7 +48,17 @@
                         @click="deleteZone(zone.id, index)"
                         >Delete</a
                       >
-                    </div>
+                    </div> -->
+                    <ag-grid-vue
+                      style="width: 250px; height: 200px"
+                      class="ag-theme-alpine"
+                      rowSelection="single"
+                      :gridOptions="zoneGridOptions"
+                      :columnDefs="columnDefs"
+                      :rowData="currentInventory.zones"
+                      @cell-clicked="onZoneCellClicked"
+                    >
+                    </ag-grid-vue>
                   </div>
                 </div>
 
@@ -93,14 +92,16 @@ import InventoryDataService from "@/services/InventoryDataService";
 import ZoneDataService from "@/services/ZoneDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import {AgGridVue} from 'ag-grid-vue';
+import { AgGridVue } from "ag-grid-vue";
 
 export default {
   name: "inventories",
   data() {
     return {
-      gridOptions: null,
-      gridApi: null,
+      inventoryGridOptions: null,
+      zoneGridOptions : null,
+      inventoryGridApi: null,
+      zoneGridApi: null,
       inventories: [],
       currentInventory: null,
       currentIndex: -1,
@@ -108,7 +109,7 @@ export default {
     };
   },
   components: {
-    AgGridVue
+    AgGridVue,
   },
   computed: {
     currentInventoryZones() {
@@ -116,10 +117,17 @@ export default {
     },
   },
   methods: {
-    onCellClicked(){  
-       let selectedNodes = this.gridApi.getSelectedNodes();
-      let selectedData = selectedNodes.map(node => node.data);
-      alert(`Selected Nodes:\n${JSON.stringify(selectedData)}`);
+    onInventoryCellClicked(e) {
+      let selectedNodes = this.inventoryGridApi.getSelectedNodes();
+      let selectedData = selectedNodes.map((node) => node.data)[0];
+      this.setActiveInventory(selectedData, e.rowIndex);
+    },
+    onZoneCellClicked(e) {
+          this.zoneGridApi = this.zoneGridOptions.api;
+
+      let selectedNodes = this.zoneGridApi.getSelectedNodes();
+      let selectedData = selectedNodes.map((node) => node.data)[0];
+      console.log('selectedData',selectedData,e.index);
     },
     retrieveInventories() {
       InventoryDataService.getAll()
@@ -167,7 +175,7 @@ export default {
           console.log(response);
           if (response.status === 200) {
             this.inventories.splice(this.currentIndex, 1);
-                        this.currentInventory = null;
+            this.currentInventory = null;
 
             this.$forceUpdate();
           }
@@ -184,22 +192,20 @@ export default {
     },
   },
   beforeMount() {
-     this.gridOptions = {};
+    this.inventoryGridOptions = {};
+    this.zoneGridOptions = {};
     this.columnDefs = [
       {
-        headerName: 'Name',
-        field: 'name',
-        filter: true,
-        cellRendererParams: {
-          clicked: function(field) {
-            alert(`${field} was clicked`);
-          }
-        }
-      }
+        headerName: "Name",
+        field: "name",
+        filter: true
+      },
     ];
   },
   mounted() {
-    this.gridApi = this.gridOptions.api;
+    this.inventoryGridApi = this.inventoryGridOptions.api;
+      
+
 
     this.retrieveInventories();
   },
