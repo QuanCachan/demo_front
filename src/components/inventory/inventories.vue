@@ -118,6 +118,7 @@ export default {
   },
   methods: {
     onInventoryCellClicked(e) {
+      
       let selectedNodes = this.inventoryGridApi.getSelectedNodes();
       let selectedData = selectedNodes.map((node) => node.data)[0];
       this.setActiveInventory(selectedData, e.rowIndex);
