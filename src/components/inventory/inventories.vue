@@ -7,7 +7,7 @@
         class="ag-theme-alpine"
         rowSelection="single"
         :gridOptions="inventoryGridOptions"
-        :columnDefs="columnDefs"
+        :columnDefs="columnInventoryDefs"
         :rowData="inventories"
         @cell-clicked="onInventoryCellClicked"
       >
@@ -53,15 +53,17 @@
                   class="ag-theme-alpine"
                   rowSelection="single"
                   :gridOptions="zoneGridOptions"
-                  :columnDefs="columnDefs"
+                  :columnDefs="columnZoneDefs"
                   :rowData="currentInventory.zones"
                   @cell-clicked="onZoneCellClicked"
                 >
                 </ag-grid-vue>
               </div>
             </div>
-
-            <a
+          </div>
+          
+        </div>
+         <a
               class="badge badge-warning"
               :href="'/inventories/' + currentInventory.id"
             >
@@ -73,8 +75,6 @@
               @click="deleteInventory(currentInventory.id)"
               >Delete</a
             >
-          </div>
-        </div>
       </div>
       <div v-else>
         <br />
@@ -227,9 +227,16 @@ export default {
   beforeMount() {
     this.inventoryGridOptions = {};
     this.zoneGridOptions = {};
-    this.columnDefs = [
+    this.columnInventoryDefs = [
       {
         headerName: "Name",
+        field: "name",
+        filter: true,
+      },
+    ];
+    this.columnZoneDefs = [
+      {
+        headerName: "Zone",
         field: "name",
         filter: true,
       },
