@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <nav class="navbar navbar-expand navbar-dark bg-success text-white">
       <router-link to="/" class="navbar-brand">GestioStock Home Page</router-link>
       <div class="navbar-nav mr-auto">
         <li class="nav-item">
