@@ -173,6 +173,11 @@ export default {
         headerName: 'Physical State',
         field: 'physicalState',
         filter: true
+      },
+      {
+        headerName: 'Unit',
+        field: 'unit',
+        filter: true
       }
     ];
   },

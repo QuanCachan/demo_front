@@ -119,7 +119,7 @@ import InventoryDataService from "@/services/InventoryDataService";
 import ZoneDataService from "@/services/ZoneDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { AgGridVue } from "ag-grid-vue";
+import {AgGridVue} from "ag-grid-vue";
 
 export default {
   name: "inventories",
@@ -154,8 +154,7 @@ export default {
       this.zoneGridApi = this.zoneGridOptions.api;
 
       let selectedNodes = this.zoneGridApi.getSelectedNodes();
-      let selectedData = selectedNodes.map((node) => node.data)[0];
-      this.currentZone = selectedData;
+      this.currentZone = selectedNodes.map((node) => node.data)[0];
       console.log(e.rowIndex);
           this.$forceUpdate();
     },
