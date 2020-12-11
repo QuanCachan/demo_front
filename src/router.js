@@ -20,7 +20,7 @@ export default new Router({
         {
             path: "/inventories",
             name: "inventories",
-            component: () => import("./components/inventory/inventories")
+            component: () => import("./components/inventory/Inventories")
         },
         {
             path: "/login",

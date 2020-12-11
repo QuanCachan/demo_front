@@ -39,12 +39,13 @@
       </div>
     </div>
     <div class="col-md-8">
-      <h4>Product List</h4>
+      <h4>Stockage</h4>
       <ag-grid-vue :grid-options="gridOptions"
                    style="width: 800px; height: 600px;"
                    class="ag-theme-alpine"
                    :columnDefs="columnDefs"
-                   :rowData="products">
+                   :rowData="products"
+                   @cell-clicked="onProductCellClicked">
       </ag-grid-vue>
     </div>
   </div>
@@ -91,6 +92,11 @@ export default {
     setActiveProduct(product, index) {
       this.currentProduct = product;
       this.currentIndex = index;
+    },
+    onProductCellClicked(e) {
+      let selectedNodes = this.inventoryGridApi.getSelectedNodes();
+      let selectedData = selectedNodes.map((node) => node.data)[0];
+      this.setActiveInventory(selectedData, e.rowIndex);
     },
   },
   beforeMount() {
