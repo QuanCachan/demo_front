@@ -1,9 +1,9 @@
 <template>
   <div class="row">
     <div class="col-sm">
-      <h4>Inventory List</h4>
+      <h4 style="width:202px">Inventory List</h4>
       <ag-grid-vue
-        style="width: 250px; height: 200px"
+        style="width: 202px; height: 200px"
         class="ag-theme-alpine"
         rowSelection="single"
         :gridOptions="inventoryGridOptions"
@@ -49,7 +49,7 @@
                       >
                     </div> -->
                 <ag-grid-vue
-                  style="width: 250px; height: 200px"
+                  style="width: 202px; height: 200px"
                   class="ag-theme-alpine"
                   rowSelection="single"
                   :gridOptions="zoneGridOptions"
@@ -61,20 +61,26 @@
               </div>
             </div>
           </div>
-          
         </div>
-         <a
+        <div class="d-flex flex-row p3">
+          <div class="p3">
+            <a
+            style="margin-right: 4px;"
               class="badge badge-warning"
               :href="'/inventories/' + currentInventory.id"
             >
               Edit
             </a>
+          </div>
+          <div class="p3">
             <a
               href="#"
               class="badge btn-danger"
               @click="deleteInventory(currentInventory.id)"
               >Delete</a
             >
+          </div>
+        </div>
       </div>
       <div v-else>
         <br />
@@ -95,20 +101,19 @@
               <label><strong>Created date:</strong></label>
               {{ currentZone.createdDate }} <br />
             </div>
-          </div>        
+          </div>
         </div>
-          <a
-                        class="badge badge-warning"
-                        :href="'/zones/' + currentZone.id"
-                      >
-                        Edit
-                      </a>
-                      <a
-                        href="#"
-                        class="badge btn-danger"
-                        @click="deleteZone(currentZone.id, index)"
-                        >Delete</a
-                      >
+         <div class="d-flex flex-row p3">
+        <a class="badge badge-warning p3" style="margin-right: 4px;" :href="'/zones/' + currentZone.id">
+          Edit
+        </a>
+        <a
+          href="#"
+          class="badge btn-danger p3"
+          @click="deleteZone(currentZone.id, index)"
+          >Delete</a
+        >
+        </div>
       </div>
     </div>
   </div>
@@ -156,7 +161,7 @@ export default {
       let selectedNodes = this.zoneGridApi.getSelectedNodes();
       this.currentZone = selectedNodes.map((node) => node.data)[0];
       console.log(e.rowIndex);
-          this.$forceUpdate();
+      this.$forceUpdate();
     },
     retrieveInventories() {
       InventoryDataService.getAll()
@@ -191,7 +196,7 @@ export default {
           console.log(index);
           if (response.status === 200) {
             this.currentInventory.zones.splice(index, 1);
-            this.currentZone=null;
+            this.currentZone = null;
             this.$forceUpdate();
           }
         })
@@ -207,7 +212,7 @@ export default {
           if (response.status === 200) {
             this.inventories.splice(this.currentIndex, 1);
             this.currentInventory = null;
-             this.currentZone = null;
+            this.currentZone = null;
             this.$forceUpdate();
           }
         })
@@ -254,4 +259,6 @@ export default {
   max-width: 750px;
   margin: auto;
 }
+
+
 </style>
