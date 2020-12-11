@@ -7,34 +7,38 @@
       </div>
     </div>
     <div class="col-md-6">
-      <div v-if="currentProduct">
-        <h4>Stock</h4>
-        <div>
-          <label><strong>Name:</strong></label> {{ currentProduct.name }}
-        </div>
-        <div>
-          <label><strong>Reference:</strong></label> {{ currentProduct.reference }}
-        </div>
-        <div>
-          <label><strong>Physical State:</strong></label> {{ currentProduct.physicalState }}
-        </div>
-        <div>
-          <label><strong>Unit:</strong></label> {{ currentProduct.unit }}
-        </div>
-        <div>
-          <label><strong>Booked Quantity:</strong></label> {{ currentProduct.bookedQuantity }}
-        </div>
-        <div>
-          <label><strong>Security Pictogram:</strong></label> {{ currentProduct.securityPictogramList }}
-        </div>
-        <div>
-          <label><strong>Description:</strong></label> {{ currentProduct.description }}
-        </div>
-        <div>
-          <label><strong>Comment:</strong></label> {{ currentProduct.comment }}
-        </div>
-        <div>
-          <label><strong>Attachment:</strong></label> {{ currentProduct.attachment }}
+      <div v-if="currentProduct" class="card" style="width: 23rem">
+        <div class="card-body">
+          <h3 class="card-title">{{ currentProduct.id }}</h3>
+          <div class="scroll">
+            <div>
+              <label><strong>Name:</strong></label> {{ currentProduct.name }}
+            </div>
+            <div>
+              <label><strong>Reference:</strong></label> {{ currentProduct.reference }}
+            </div>
+            <div>
+              <label><strong>Physical State:</strong></label> {{ currentProduct.physicalState }}
+            </div>
+            <div>
+              <label><strong>Unit:</strong></label> {{ currentProduct.unit }}
+            </div>
+            <div>
+              <label><strong>Booked Quantity:</strong></label> {{ currentProduct.bookedQuantity }}
+            </div>
+            <div>
+              <label><strong>Security Pictogram:</strong></label> {{ currentProduct.securityPictogramList }}
+            </div>
+            <div>
+              <label><strong>Description:</strong></label> {{ currentProduct.description }}
+            </div>
+            <div>
+              <label><strong>Comment:</strong></label> {{ currentProduct.comment }}
+            </div>
+            <div>
+              <label><strong>Attachment:</strong></label> {{ currentProduct.attachment }}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,6 +49,7 @@
                    class="ag-theme-alpine"
                    :columnDefs="columnDefs"
                    :rowData="products"
+                   rowSelection="single"
                    @cell-clicked="onProductCellClicked">
       </ag-grid-vue>
     </div>
@@ -67,11 +72,10 @@ export default {
       currentIndex: -1,
       searchInput: "",
       columnDefs: null,
+      stockGridApi: null,
       gridOptions: {
         debug: false,
-        defaultColDef: {
-
-        }
+        defaultColDef: {}
       }
     }
   },
@@ -94,9 +98,12 @@ export default {
       this.currentIndex = index;
     },
     onProductCellClicked(e) {
-      let selectedNodes = this.inventoryGridApi.getSelectedNodes();
+      console.log('ABC', this.stockGridApi);
+      let selectedNodes = this.stockGridApi.getSelectedNodes();
+      console.log('selectedNodes', selectedNodes);
       let selectedData = selectedNodes.map((node) => node.data)[0];
-      this.setActiveInventory(selectedData, e.rowIndex);
+      console.log('selectedData', selectedData);
+      this.setActiveProduct(selectedData, e.rowIndex);
     },
   },
   beforeMount() {
@@ -127,8 +134,10 @@ export default {
         filter: true
       }
     ];
+    this.gridOptions = {};
   },
   mounted() {
+    this.stockGridApi = this.gridOptions.api;
     this.retrieveProducts();
   }
 }
@@ -139,5 +148,10 @@ export default {
   text-align: left;
   max-width: 750px;
   margin: auto;
+}
+
+.scroll {
+  max-height: 300px;
+  overflow-y: auto;
 }
 </style>

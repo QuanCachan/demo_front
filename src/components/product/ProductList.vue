@@ -12,6 +12,9 @@
           </button>
         </div>
       </div>
+      <div class="mb-3">
+          <button @click="addProduct" class="btn btn-success" type="button">Add Product</button>
+      </div>
     </div>
     <div class="col-md-6">
       <h4>Product List</h4>
@@ -21,48 +24,48 @@
                    :columnDefs="columnDefs"
                    :rowData="products">
       </ag-grid-vue>
-<!--      <ul class="list-group">
-        <li class="list-group-item"
-            :class="{ active: index === currentIndex }"
-            v-for="(product, index) in products"
-            :key="index"
-            @click="setActiveProduct(product, index)">
-          {{ product.name }}
-        </li>
-      </ul>-->
+      <!--      <ul class="list-group">
+              <li class="list-group-item"
+                  :class="{ active: index === currentIndex }"
+                  v-for="(product, index) in products"
+                  :key="index"
+                  @click="setActiveProduct(product, index)">
+                {{ product.name }}
+              </li>
+            </ul>-->
     </div>
-<!--    <div class="col-md-6">
-      <div v-if="currentProduct">
-        <h4>Product</h4>
-        <div>
-          <label><strong>Name:</strong></label> {{ currentProduct.name }}
-        </div>
-        <div>
-          <label><strong>Reference:</strong></label> {{ currentProduct.reference }}
-        </div>
-        <div>
-          <label><strong>Physical State:</strong></label> {{ currentProduct.physicalState }}
-        </div>
-        <div>
-          <label><strong>Unit:</strong></label> {{ currentProduct.unit }}
-        </div>
-        <div>
-          <label><strong>Booked Quantity:</strong></label> {{ currentProduct.bookedQuantity }}
-        </div>
-        <div>
-          <label><strong>Security Pictogram:</strong></label> {{ currentProduct.securityPictogramList }}
-        </div>
-        <div>
-          <label><strong>Description:</strong></label> {{ currentProduct.description }}
-        </div>
-        <div>
-          <label><strong>Comment:</strong></label> {{ currentProduct.comment }}
-        </div>
-        <div>
-          <label><strong>Attachment:</strong></label> {{ currentProduct.attachment }}
-        </div>
-      </div>
-    </div>-->
+    <!--    <div class="col-md-6">
+          <div v-if="currentProduct">
+            <h4>Product</h4>
+            <div>
+              <label><strong>Name:</strong></label> {{ currentProduct.name }}
+            </div>
+            <div>
+              <label><strong>Reference:</strong></label> {{ currentProduct.reference }}
+            </div>
+            <div>
+              <label><strong>Physical State:</strong></label> {{ currentProduct.physicalState }}
+            </div>
+            <div>
+              <label><strong>Unit:</strong></label> {{ currentProduct.unit }}
+            </div>
+            <div>
+              <label><strong>Booked Quantity:</strong></label> {{ currentProduct.bookedQuantity }}
+            </div>
+            <div>
+              <label><strong>Security Pictogram:</strong></label> {{ currentProduct.securityPictogramList }}
+            </div>
+            <div>
+              <label><strong>Description:</strong></label> {{ currentProduct.description }}
+            </div>
+            <div>
+              <label><strong>Comment:</strong></label> {{ currentProduct.comment }}
+            </div>
+            <div>
+              <label><strong>Attachment:</strong></label> {{ currentProduct.attachment }}
+            </div>
+          </div>
+        </div>-->
   </div>
 
 </template>
@@ -151,6 +154,8 @@ export default {
       this.currentProduct = product;
       this.currentIndex = index;
     },
+    addProduct() {
+    }
   },
   beforeMount() {
     this.columnDefs = [
