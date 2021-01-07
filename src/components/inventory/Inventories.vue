@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-sm">
-      <h4 style="width:202px">Inventory List</h4>
+      <h4 style="width: 202px">Inventory List</h4>
       <ag-grid-vue
         style="width: 202px; height: 200px"
         class="ag-theme-alpine"
@@ -65,7 +65,7 @@
         <div class="d-flex flex-row p3">
           <div class="p3">
             <a
-            style="margin-right: 4px;"
+              style="margin-right: 4px"
               class="badge badge-warning"
               :href="'/inventories/' + currentInventory.id"
             >
@@ -103,16 +103,20 @@
             </div>
           </div>
         </div>
-         <div class="d-flex flex-row p3">
-        <a class="badge badge-warning p3" style="margin-right: 4px;" :href="'/zones/' + currentZone.id">
-          Edit
-        </a>
-        <a
-          href="#"
-          class="badge btn-danger p3"
-          @click="deleteZone(currentZone.id, index)"
-          >Delete</a
-        >
+        <div class="d-flex flex-row p3">
+          <a
+            class="badge badge-warning p3"
+            style="margin-right: 4px"
+            :href="'/zones/' + currentZone.id"
+          >
+            Edit
+          </a>
+          <a
+            href="#"
+            class="badge btn-danger p3"
+            @click="deleteZone(currentZone.id)"
+            >Delete</a
+          >
         </div>
       </div>
     </div>
@@ -124,7 +128,7 @@ import InventoryDataService from "@/services/InventoryDataService";
 import ZoneDataService from "@/services/ZoneDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import {AgGridVue} from "ag-grid-vue";
+import { AgGridVue } from "ag-grid-vue";
 
 export default {
   name: "inventories",
@@ -189,13 +193,15 @@ export default {
           //TODO: ERROR popup
         });
     },
-    deleteZone(zoneId, index) {
+    deleteZone(zoneId) {
       ZoneDataService.deleteZone(zoneId)
         .then((response) => {
           console.log(response);
-          console.log(index);
           if (response.status === 200) {
-            this.currentInventory.zones.splice(index, 1);
+            let tempoZones = this.currentInventory.zones;
+            this.currentInventory.zones = tempoZones.filter(function (obj) {
+              return obj.id !== zoneId;
+            });
             this.currentZone = null;
             this.$forceUpdate();
           }
@@ -259,6 +265,4 @@ export default {
   max-width: 750px;
   margin: auto;
 }
-
-
 </style>
