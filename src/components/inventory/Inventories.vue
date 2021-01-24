@@ -1,127 +1,144 @@
 <template>
-  <div class="row">
-    <div class="col-sm">
-      <h4 style="width: 202px">Inventory List</h4>
-      <ag-grid-vue
-        style="width: 202px; height: 200px"
-        class="ag-theme-alpine"
-        rowSelection="single"
-        :gridOptions="inventoryGridOptions"
-        :columnDefs="columnInventoryDefs"
-        :rowData="inventories"
-        @cell-clicked="onInventoryCellClicked"
+  <div>
+    <!-- Modal -->
+    <div v-if="isDisplayModal && currentZone">
+      <div
+        class="modal centered"
+        tabindex="-1"
+        role="dialog"
+        style="display: block"
       >
-      </ag-grid-vue>
-    </div>
-    <div class="col-sm">
-      <div v-if="currentInventory">
-        <h4>Inventory</h4>
-
-        <div class="card" style="width: 23rem">
-          <div class="card-body">
-            <div class="card-text vertical-alignment">
-              <label><strong>Name:</strong></label>
-              {{ currentInventory.name }} <br />
-              <label><strong>Description:</strong></label>
-              {{ currentInventory.description }} <br />
-              <label><strong>Created date:</strong></label>
-              {{ currentInventory.createdDate }} <br />
-              <div v-if="currentInventory.zones">
-                <!--<div
-                      class="list-group-item"
-                      v-for="(zone, index) in currentInventoryZones"
-                      :key="index"
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Zone {{ currentZone.publicId }}</h5>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                v-on:click="closeModal()"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div v-if="currentZone">
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Name</span>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Zone name"
+                    aria-label="Name"
+                    aria-describedby="basic-addon1"
+                    v-model="currentZone.name"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Description</span
                     >
-                      {{ zone.name }} <br />
-                      {{ zone.description }} <br />
-                      {{ zone.createdDate }} <br />
-                      <a
-                        class="badge badge-warning"
-                        :href="'/zones/' + zone.id"
-                      >
-                        Edit
-                      </a>
-                      <a
-                        href="#"
-                        class="badge btn-danger"
-                        @click="deleteZone(zone.id, index)"
-                        >Delete</a
-                      >
-                    </div> -->
-                <ag-grid-vue
-                  style="width: 202px; height: 200px"
-                  class="ag-theme-alpine"
-                  rowSelection="single"
-                  :gridOptions="zoneGridOptions"
-                  :columnDefs="columnZoneDefs"
-                  :rowData="currentInventory.zones"
-                  @cell-clicked="onZoneCellClicked"
-                >
-                </ag-grid-vue>
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Description"
+                    aria-label="Description"
+                    aria-describedby="basic-addon1"
+                    v-model="currentZone.description"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1"
+                      >Created date</span
+                    >
+                  </div>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Created date"
+                    aria-label="Created date"
+                    aria-describedby="basic-addon1"
+                    v-model="currentZone.createdDate"
+                    disabled="true"
+                  />
+                </div>
+                <div class="d-flex flex-row p3">
+                  <a
+                    href="#"
+                    class="badge btn-danger p3"
+                    @click="deleteZone(currentZone.id)"
+                    >Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-primary"
+                v-on:click="updateZone"
+              >
+                Save changes
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                v-on:click="closeModal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <h4 style="width: 202px">Inventory List</h4>
+        <div class="container">
+          <div class="row row-cols-2 row-margin-05">
+            <div v-for="inventory in inventories" :key="inventory.id">
+              <div class="col-md-12" style="width: 52rem">
+                <div class="card col-md-24">
+                  <div class="card-body">
+                    <div class="card-text vertical-alignment">
+                      <label><strong>Name:</strong></label>
+                      {{ inventory.name }} <br />
+                      <label><strong>Description:</strong></label>
+                      {{ inventory.description }} <br />
+                      <label><strong>Created date:</strong></label>
+                      {{ inventory.createdDate }} <br />
+                      <div v-if="inventory.zones != null">
+                        <ag-grid-vue
+                          style="width: 202px; height: 200px"
+                          class="ag-theme-alpine"
+                          rowSelection="single"
+                          :gridOptions="zoneGridOptions"
+                          :columnDefs="columnZoneDefs"
+                          :rowData="inventory.zones"
+                          @cell-clicked="onZoneCellClicked"
+                        >
+                        </ag-grid-vue>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="d-flex flex-row p3">
-          <div class="p3">
-            <a
-              style="margin-right: 4px"
-              class="badge badge-warning"
-              :href="'/inventories/' + currentInventory.id"
-            >
-              Edit
-            </a>
-          </div>
-          <div class="p3">
-            <a
-              href="#"
-              class="badge btn-danger"
-              @click="deleteInventory(currentInventory.id)"
-              >Delete</a
-            >
-          </div>
-        </div>
-      </div>
-      <div v-else>
-        <br />
-        <p>Please click on an Inventory...</p>
-      </div>
-    </div>
-
-    <div class="col">
-      <div v-if="currentZone">
-        <h4>Zone</h4>
-        <div class="card" style="width: 23rem">
-          <div class="card-body">
-            <div class="card-text">
-              <label><strong>Name:</strong></label>
-              {{ currentZone.name }} <br />
-              <label><strong>Description:</strong></label>
-              {{ currentZone.description }} <br />
-              <label><strong>Created date:</strong></label>
-              {{ currentZone.createdDate }} <br />
-            </div>
-          </div>
-        </div>
-        <div class="d-flex flex-row p3">
-          <a
-            class="badge badge-warning p3"
-            style="margin-right: 4px"
-            :href="'/zones/' + currentZone.id"
-          >
-            Edit
-          </a>
-          <a
-            href="#"
-            class="badge btn-danger p3"
-            @click="deleteZone(currentZone.id)"
-            >Delete</a
-          >
         </div>
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import InventoryDataService from "@/services/InventoryDataService";
@@ -134,6 +151,8 @@ export default {
   name: "inventories",
   data() {
     return {
+      currentInventoryId: null,
+      isDisplayModal: false,
       inventoryGridOptions: null,
       zoneGridOptions: null,
       inventoryGridApi: null,
@@ -154,23 +173,80 @@ export default {
     },
   },
   methods: {
+    updateZone() {
+      console.log("currentZone", this.currentZone);
+      ZoneDataService.updateZone(
+        this.currentZone.publicId,
+        this.currentZone
+      ).then((response) => {
+        if (response.status === 200) {
+          console.log("response.data", response.data);
+         // this.currentZone = response.data;
+          for (let inventory of this.inventories) {
+            console.log(
+              "###inventoryid",
+              inventory.id,
+              this.currentZone.inventoryId
+            );
+            if (inventory.id == this.currentZone.inventoryId) {
+              console.log("OKKK");
+              for (let zone of inventory.zones) {
+                if (zone.id == this.currentZone.id) {
+                  zone = this.currentZone;
+                  
+                }
+              }
+            }
+          }
+          //this.inventories.sort((a, b) => (a.name > b.name ? 1 : -1));
+          console.log("newInventories", this.inventories);
+
+          this.isDisplayModal = false;
+          this.currentZone = null;
+              this.retrieveInventories();
+
+          this.$forceUpdate();
+          
+        }
+      });
+    },
+    closeModal() {
+      this.isDisplayModal = false;
+      this.currentZone = null;
+    },
     onInventoryCellClicked(e) {
       let selectedNodes = this.inventoryGridApi.getSelectedNodes();
       let selectedData = selectedNodes.map((node) => node.data)[0];
       this.setActiveInventory(selectedData, e.rowIndex);
     },
     onZoneCellClicked(e) {
-      this.zoneGridApi = this.zoneGridOptions.api;
-
-      let selectedNodes = this.zoneGridApi.getSelectedNodes();
-      this.currentZone = selectedNodes.map((node) => node.data)[0];
-      console.log(e.rowIndex);
+      // this.zoneGridApi = this.zoneGridOptions.api;
+      // let selectedNodes = this.zoneGridApi.getSelectedNodes();
+      this.currentZone = e.data;
+      console.log("currentZone", this.currentZone, e);
+      this.isDisplayModal = true;
       this.$forceUpdate();
     },
     retrieveInventories() {
+      console.log("[retrieveInventories...]");
       InventoryDataService.getAll()
         .then((response) => {
           this.inventories = response.data;
+          console.log("inventories", this.inventories);
+          for (const inventory of this.inventories) {
+            console.log(inventory.name);
+            ZoneDataService.getZonesByInventoryId(inventory.id)
+              .then((response) => {
+                console.log("zones", response);
+                inventory.zones = response.data;
+                this.$forceUpdate();
+              })
+              .catch((e) => {
+                console.log("step 2: ", e);
+                //TODO: ERROR popup
+              });
+          }
+          this.$forceUpdate();
         })
         .catch((e) => {
           console.log("step 2: ", e);
@@ -198,11 +274,25 @@ export default {
         .then((response) => {
           console.log(response);
           if (response.status === 200) {
-            let tempoZones = this.currentInventory.zones;
-            this.currentInventory.zones = tempoZones.filter(function (obj) {
+            let currentInventory = this.inventories.find((obj) => {
+              return obj.id === this.currentZone.inventoryId;
+            });
+            currentInventory.zones = currentInventory.zones.filter(function (
+              obj
+            ) {
               return obj.id !== zoneId;
             });
+            let newInventories = this.inventories.filter((obj) => {
+              return obj.id !== this.currentZone.inventoryId;
+            });
+            newInventories.push(currentInventory);
+            newInventories.sort((a, b) => (a.name > b.name ? 1 : -1));
+
+            this.inventories = newInventories;
+            console.log("inventories", this.inventories);
             this.currentZone = null;
+            this.isDisplayModal = false;
+             this.retrieveInventories();
             this.$forceUpdate();
           }
         })
@@ -229,9 +319,11 @@ export default {
     },
     refreshList() {
       this.retrieveInventories();
+      this.currentInventoryId = null;
       this.currentInventory = null;
       this.currentZone = null;
       this.currentIndex = -1;
+      this.isDisplayModal = false;
     },
   },
   beforeMount() {
@@ -264,5 +356,14 @@ export default {
   text-align: left;
   max-width: 750px;
   margin: auto;
+}
+.centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

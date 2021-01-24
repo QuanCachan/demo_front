@@ -9,6 +9,10 @@ class ZoneDataService {
         return http.get("/zones?inventoryId=" +inventoryId);
     }
 
+    updateZone(publicId,zone){
+        return http.post("/zones/" +publicId,zone);
+    }
+
     deleteZone(id){
         return http.delete("/zones/" +id);
     }
