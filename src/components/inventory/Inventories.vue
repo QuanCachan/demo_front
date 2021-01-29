@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- Modal -->
+  <div class="list row">
+    <!-- Modal
     <div v-if="isDisplayModal && currentZone">
       <div
         class="modal centered"
@@ -99,6 +99,7 @@
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-sm">
         <h4 style="width: 202px">Inventory List</h4>
@@ -136,16 +137,51 @@
         </div>
       </div>
     </div>
+    -->
+    <div class="col-md-8">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search by name"
+               v-model="inventoryName"/>
+
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button"
+                  @click="searchByName">
+            Search
+          </button>
+        </div>
+      </div>
+      <div class="mb-3">
+        <button @click="addInventory" class="btn btn-success" type="button">Add Inventory</button>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <h4>Inventory List</h4>
+      <ag-grid-vue :grid-options="gridOptions"
+                   style="width: 800px; height: 600px;"
+                   class="ag-theme-alpine"
+                   :columnDefs="columnDefs"
+                   :rowData="inventories">
+      </ag-grid-vue>
+      <!--      <ul class="list-group">
+              <li class="list-group-item"
+                  :class="{ active: index === currentIndex }"
+                  v-for="(product, index) in products"
+                  :key="index"
+                  @click="setActiveProduct(product, index)">
+                {{ product.name }}
+              </li>
+            </ul>-->
+    </div>
   </div>
 </template>
 
 
 <script>
 import InventoryDataService from "@/services/InventoryDataService";
-import ZoneDataService from "@/services/ZoneDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { AgGridVue } from "ag-grid-vue";
+import {AgGridVue} from "ag-grid-vue";
 
 export default {
   name: "inventories",
@@ -159,21 +195,21 @@ export default {
       zoneGridApi: null,
       inventories: [],
       currentInventory: null,
-      currentZone: null,
       currentIndex: -1,
-      title: "",
+      inventoryName: "",
+      columnDefs: null,
+      gridOptions: {
+        debug: false,
+        defaultColDef: {},
+      }
     };
   },
   components: {
-    AgGridVue,
+    AgGridVue
   },
-  computed: {
-    currentInventoryZones() {
-      return this.currentInventory.zones;
-    },
-  },
+  computed: {},
   methods: {
-    updateZone() {
+    /*updateZone() {
       console.log("currentZone", this.currentZone);
       ZoneDataService.updateZone(
         this.currentZone.publicId,
@@ -213,51 +249,54 @@ export default {
     closeModal() {
       this.isDisplayModal = false;
       this.currentZone = null;
+    },*/
+    searchByName() {
+    },
+    addInventory() {
     },
     onInventoryCellClicked(e) {
       let selectedNodes = this.inventoryGridApi.getSelectedNodes();
       let selectedData = selectedNodes.map((node) => node.data)[0];
       this.setActiveInventory(selectedData, e.rowIndex);
     },
-    onZoneCellClicked(e) {
+    /*onZoneCellClicked(e) {
       // this.zoneGridApi = this.zoneGridOptions.api;
       // let selectedNodes = this.zoneGridApi.getSelectedNodes();
       this.currentZone = e.data;
       console.log("currentZone", this.currentZone, e);
       this.isDisplayModal = true;
       this.$forceUpdate();
-    },
+    },*/
     retrieveInventories() {
       console.log("[retrieveInventories...]");
       InventoryDataService.getAll()
-        .then((response) => {
-          this.inventories = response.data;
-          console.log("inventories", this.inventories);
-          for (const inventory of this.inventories) {
-            console.log(inventory.name);
-            ZoneDataService.getZonesByInventoryId(inventory.id)
-              .then((response) => {
-                console.log("zones", response);
-                inventory.zones = response.data;
-                this.$forceUpdate();
-              })
-              .catch((e) => {
-                console.log("step 2: ", e);
-                //TODO: ERROR popup
-              });
-          }
-          this.$forceUpdate();
-        })
-        .catch((e) => {
-          console.log("step 2: ", e);
-          //TODO: ERROR popup
-        });
+          .then((response) => {
+            this.inventories = response.data;
+            console.log("inventories", this.inventories);
+            /*for (const inventory of this.inventories) {
+              console.log(inventory.name);
+              ZoneDataService.getZonesByInventoryId(inventory.id)
+                .then((response) => {
+                  console.log("zones", response);
+                  inventory.zones = response.data;
+                  this.$forceUpdate();
+                })
+                .catch((e) => {
+                  console.log("step 2: ", e);
+                  //TODO: ERROR popup
+                });
+            }*/
+          })
+          .catch((e) => {
+            console.log("step 2: ", e);
+            //TODO: ERROR popup
+          });
     },
     setActiveInventory(inventory, index) {
       console.log("inventoryId", inventory.id);
       this.currentInventory = inventory;
       this.currentIndex = index;
-      ZoneDataService.getZonesByInventoryId(inventory.id)
+      /*ZoneDataService.getZonesByInventoryId(inventory.id)
         .then((response) => {
           console.log("zones", response.data);
           this.currentInventory.zones = response.data;
@@ -267,9 +306,9 @@ export default {
         .catch((e) => {
           console.log("step 2: ", e);
           //TODO: ERROR popup
-        });
+        });*/
     },
-    deleteZone(zoneId) {
+    /*deleteZone(zoneId) {
       ZoneDataService.deleteZone(zoneId)
         .then((response) => {
           console.log(response);
@@ -300,22 +339,22 @@ export default {
           console.log("step 2: ", e);
           //TODO: ERROR popup
         });
-    },
+    },*/
     deleteInventory(inventoryId) {
       InventoryDataService.deleteInventory(inventoryId)
-        .then((response) => {
-          console.log(response);
-          if (response.status === 200) {
-            this.inventories.splice(this.currentIndex, 1);
-            this.currentInventory = null;
-            this.currentZone = null;
-            this.$forceUpdate();
-          }
-        })
-        .catch((e) => {
-          console.log("step 2: ", e);
-          //TODO: ERROR popup
-        });
+          .then((response) => {
+            console.log(response);
+            if (response.status === 200) {
+              this.inventories.splice(this.currentIndex, 1);
+              this.currentInventory = null;
+              this.currentZone = null;
+              this.$forceUpdate();
+            }
+          })
+          .catch((e) => {
+            console.log("step 2: ", e);
+            //TODO: ERROR popup
+          });
     },
     refreshList() {
       this.retrieveInventories();
@@ -325,22 +364,38 @@ export default {
       this.currentIndex = -1;
       this.isDisplayModal = false;
     },
+    onEditButtonClick() {
+    }
   },
   beforeMount() {
     this.inventoryGridOptions = {};
     this.zoneGridOptions = {};
-    this.columnInventoryDefs = [
+    this.columnDefs = [
+      {
+        headerName: "Id",
+        field: "id",
+        filter: true,
+      },
       {
         headerName: "Name",
         field: "name",
         filter: true,
       },
-    ];
-    this.columnZoneDefs = [
       {
-        headerName: "Zone",
-        field: "name",
+        headerName: "Created date",
+        field: "createdDate",
         filter: true,
+      },
+      {
+        headerName: "Description",
+        field: "description",
+        filter: true,
+      },
+      {
+        headerName: "Delete",
+        cellRenderer: function(){
+          return '<button type="button"> Delete </button>'
+        },
       },
     ];
   },
@@ -357,6 +412,7 @@ export default {
   max-width: 750px;
   margin: auto;
 }
+
 .centered {
   position: fixed;
   top: 50%;
