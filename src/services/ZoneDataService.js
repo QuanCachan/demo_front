@@ -14,6 +14,7 @@ class ZoneDataService {
     }
 
     deleteZone(id){
+        // TODO: return http.delete(id);
         return http.delete("/zones/" +id);
     }
 }

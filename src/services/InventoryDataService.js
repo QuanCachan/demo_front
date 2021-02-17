@@ -5,8 +5,12 @@ class InventoryDataService {
         return http.get("/inventories");
     }
 
-    deleteInventory(id){
-        return http.delete("/inventories/" +id);
+    deleteInventory(id) {
+        return http.delete("/inventories/" + id);
+    }
+
+    createInventory(inventory) {
+        return http.post("/inventories", JSON.stringify(inventory));
     }
 }
 

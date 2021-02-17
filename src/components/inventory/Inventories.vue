@@ -138,9 +138,57 @@
       </div>
     </div>
     -->
+
+    <!-- Creating Inventory Modal -->
+    <div v-if="isCreatingInventory"
+         class="modal centered"
+         tabindex="-1"
+         role="dialog"
+         style="display: block">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Creating location...</h5>
+            <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                v-on:click="closeCreatingInventoryModal">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div style="text-align: left">
+              <b-form id="createInventory" @submit="confirmCreatingInventory" @reset="onReset" v-if="show">
+                <b-form-group id="input-group-1"
+                              description="Please insert an Inventory name (1-50 characters).">
+                  <b-form-input inline id="input-1"
+                                v-model="form.name"
+                                placeholder="Insert name"
+                                required></b-form-input>
+                </b-form-group>
+                <b-form-group id="input-group-2">
+                  <b-form-textarea inline id="input-2"
+                                   v-model="form.description"
+                                   placeholder="Insert description"
+                                   style="height: 100px"></b-form-textarea>
+                </b-form-group>
+
+                <b-button type="submit" variant="primary">Submit</b-button>
+                <b-button type="reset" variant="danger">Reset</b-button>
+              </b-form>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="col-md-8">
       <div class="input-group mb-3">
-        <input type="text" class="form-control" placeholder="Search by name"
+        <input type="text" class="form-control" placeholder="Search location by name/Id"
                v-model="inventoryName"/>
 
         <div class="input-group-append">
@@ -151,12 +199,13 @@
         </div>
       </div>
       <div class="mb-3">
-        <button @click="addInventory" class="btn btn-success" type="button">Add Inventory</button>
+        <button @click="openCreateInventoryDialog" class="btn btn-success" type="button">Add Location</button>
       </div>
     </div>
 
+    <!-- Inventory  -->
     <div class="col-md-6">
-      <h4>Inventory List</h4>
+      <h4>Location List</h4>
       <ag-grid-vue :grid-options="gridOptions"
                    style="width: 800px; height: 600px;"
                    class="ag-theme-alpine"
@@ -182,6 +231,8 @@ import InventoryDataService from "@/services/InventoryDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import {AgGridVue} from "ag-grid-vue";
+import {BButton, BForm, BFormGroup, BFormInput, BFormTextarea} from 'bootstrap-vue';
+
 
 export default {
   name: "inventories",
@@ -201,11 +252,22 @@ export default {
       gridOptions: {
         debug: false,
         defaultColDef: {},
-      }
+      },
+      isCreatingInventory: false,
+      form: {
+        name: '',
+        description: ''
+      },
+      show: true
     };
   },
   components: {
-    AgGridVue
+    AgGridVue,
+    BForm,
+    BFormGroup,
+    BFormInput,
+    BFormTextarea,
+    BButton
   },
   computed: {},
   methods: {
@@ -251,8 +313,6 @@ export default {
       this.currentZone = null;
     },*/
     searchByName() {
-    },
-    addInventory() {
     },
     onInventoryCellClicked(e) {
       let selectedNodes = this.inventoryGridApi.getSelectedNodes();
@@ -365,7 +425,39 @@ export default {
       this.isDisplayModal = false;
     },
     onEditButtonClick() {
-    }
+    },
+    confirmCreatingInventory(event) {
+      event.preventDefault();
+      console.log('ABC:', this.form);
+      InventoryDataService.createInventory(this.form)
+          .then((response) => {
+            console.log("zone created response:", response);
+            this.isCreatingInventory = false;
+            this.retrieveInventories();
+          })
+          .catch((e) => {
+            console.log("step 2: ", e);
+            //TODO: ERROR popup
+          });
+    },
+    onReset(event) {
+      event.preventDefault();
+      // Reset our form values
+      this.form.name = '';
+      this.form.description = '';
+      // Trick to reset/clear native browser form validation state
+      this.show = false
+      this.$nextTick(() => {
+        this.show = true
+      })
+    },
+    closeCreatingInventoryModal() {
+      this.isCreatingInventory = false;
+      this.currentInventory = null;
+    },
+    openCreateInventoryDialog() {
+      this.isCreatingInventory = true;
+    },
   },
   beforeMount() {
     this.inventoryGridOptions = {};
@@ -373,7 +465,7 @@ export default {
     this.columnDefs = [
       {
         headerName: "Id",
-        field: "id",
+        field: "publicId",
         filter: true,
       },
       {
@@ -393,8 +485,8 @@ export default {
       },
       {
         headerName: "Delete",
-        cellRenderer: function(){
-          return '<button type="button"> Delete </button>'
+        cellRenderer: function () {
+          return '<button type="button" @click="deleteInventory(currentInventory.id)"> Delete </button>'
         },
       },
     ];
