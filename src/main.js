@@ -4,9 +4,17 @@ import router from "./router";
 import {store} from './store/store';
 
 Vue.config.productionTip = false
+//TODO: Vue.filter("date", DateFilter);
+//TODO: ApiService.init();
+//TODO: Authentication
+
+/*// Ensure we checked auth before each page load.
+router.beforeEach((to, from, next) =>
+    Promise.all([store.dispatch(CHECK_AUTH)]).then(next)
+);*/
 
 new Vue({
-  router,
-  store: store,
-  render: h => h(App),
+    router,
+    store,
+    render: h => h(App),
 }).$mount('#app')
