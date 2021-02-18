@@ -1,11 +1,16 @@
 {
   "name": "gestio-stock-front",
   "version": "0.1.0",
+  "description": "GestioStock™ front end",
+  "author": "Minh Quan TRAN <mqtran.cachan@gmail.com>",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "e2e": "node test/e2e/runner.js",
+    "test": "npm run unit && npm run e2e"
   },
   "dependencies": {
     "ag-grid-community": "^24.1.0",
