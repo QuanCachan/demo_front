@@ -3,9 +3,12 @@ import App from './App.vue';
 import router from "./router/router";
 import store from "./store";
 
+import DateFilter from './common/date.filter'
+
 Vue.config.productionTip = false
-//TODO: Vue.filter("date", DateFilter);
-//TODO: ApiService.init();
+
+Vue.filter("date", DateFilter);
+
 //TODO: Authentication
 
 /*// Ensure we checked auth before each page load.
