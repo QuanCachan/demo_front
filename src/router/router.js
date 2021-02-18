@@ -23,6 +23,11 @@ export default new Router({
             component: () => import("../vues/inventory/Inventories")
         },
         {
+            path: '/settings',
+            name: 'settings',
+            component: () => import("../vues/settings/Settings")
+        },
+        {
             path: "/login",
             name: "login",
             component: () => import("../vues/login/Authentication")
