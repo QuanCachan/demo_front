@@ -1,9 +1,13 @@
 <template>
   <footer>
     <div class="container">
-      <a href="/" class="logo-font">GestioStock</a>
+      <router-link class="logo-font"
+                   :to="{ name: 'home', params: {} }">
+        GestioStock
+      </router-link>
       <span class="attribution">
-        An interactive learning project from <a href="https://www.google.com/">Google</a>. Code &amp; design licensed under MIT.
+        An interactive learning project from
+        <a target="blank" href="https://www.google.com/">Google</a>. Code &amp; design licensed under MIT.
       </span>
     </div>
   </footer>
