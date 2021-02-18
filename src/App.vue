@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <rwv-header></rwv-header>
     <nav class="navbar navbar-expand navbar-dark bg-success text-white">
       <router-link to="/" class="navbar-brand">GestioStock Home Page</router-link>
       <div class="navbar-nav mr-auto">
@@ -18,14 +19,20 @@
     <div class="container mt-3">
       <router-view/>
     </div>
+    <rwv-footer></rwv-footer>
   </div>
 </template>
 
 <script>
+import RwvHeader from './components/Header'
+import RwvFooter from './components/Footer'
 
 export default {
   name: 'App',
-  components: {},
+  components: {
+    RwvHeader,
+    RwvFooter
+  }
 }
 
 </script>
