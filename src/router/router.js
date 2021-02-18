@@ -10,22 +10,22 @@ export default new Router({
             path: "/",
             alias: "/stock",
             name: "stock",
-            component: () => import("./components/stock/Stock")
+            component: () => import("../components/stock/Stock")
         },
         {
             path: "/products",
             name: "products",
-            component: () => import("./components/product/ProductList")
+            component: () => import("../components/product/ProductList")
         },
         {
             path: "/inventories",
             name: "inventories",
-            component: () => import("./components/inventory/Inventories")
+            component: () => import("../components/inventory/Inventories")
         },
         {
             path: "/login",
             name: "login",
-            component: () => import("./components/login/Authentication")
+            component: () => import("../components/login/Authentication")
         }
     ]
 })
