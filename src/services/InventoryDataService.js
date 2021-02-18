@@ -1,8 +1,8 @@
 import http from "../http-common"
 
-class InventoryDataService {
+class LocationDataService {
     getAll() {
-        return http.get("/inventories");
+        return http.get("/locations");
     }
 
     deleteInventory(id) {
@@ -14,4 +14,4 @@ class InventoryDataService {
     }
 }
 
-export default new InventoryDataService();
+export default new LocationDataService();

@@ -8,7 +8,7 @@
           <router-link to="/products" class="nav-link">Products</router-link>
         </li>
         <li class="nav-item">
-          <router-link to="/inventories" class="nav-link">Locations</router-link>
+          <router-link to="/locations" class="nav-link">Locations</router-link>
         </li>
         <li class="nav-item">
           <router-link to="/login" class="nav-link">Login</router-link>

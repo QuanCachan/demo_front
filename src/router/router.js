@@ -18,9 +18,9 @@ export default new Router({
             component: () => import("../vues/product/ProductList")
         },
         {
-            path: "/inventories",
-            name: "inventories",
-            component: () => import("../vues/inventory/Inventories")
+            path: "/locations",
+            name: "locations",
+            component: () => import("../vues/inventory/Locations")
         },
         {
             path: '/settings',

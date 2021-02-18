@@ -1,6 +1,7 @@
+<!--
 <template>
   <div class="list row">
-    <!-- Modal
+    &lt;!&ndash; Modal
     <div v-if="isDisplayModal && currentZone">
       <div
         class="modal centered"
@@ -137,9 +138,9 @@
         </div>
       </div>
     </div>
-    -->
+    &ndash;&gt;
 
-    <!-- Creating Inventory Modal -->
+    &lt;!&ndash; Creating Inventory Modal &ndash;&gt;
     <div v-if="isCreatingInventory"
          class="modal centered"
          tabindex="-1"
@@ -203,7 +204,7 @@
       </div>
     </div>
 
-    <!-- Inventory  -->
+    &lt;!&ndash; Inventory  &ndash;&gt;
     <div class="col-md-6">
       <h4>Location List</h4>
       <ag-grid-vue :grid-options="gridOptions"
@@ -212,7 +213,7 @@
                    :columnDefs="columnDefs"
                    :rowData="inventories">
       </ag-grid-vue>
-      <!--      <ul class="list-group">
+      &lt;!&ndash;      <ul class="list-group">
               <li class="list-group-item"
                   :class="{ active: index === currentIndex }"
                   v-for="(product, index) in products"
@@ -220,7 +221,7 @@
                   @click="setActiveProduct(product, index)">
                 {{ product.name }}
               </li>
-            </ul>-->
+            </ul>&ndash;&gt;
     </div>
   </div>
 </template>
@@ -514,4 +515,4 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-</style>
+</style>-->
