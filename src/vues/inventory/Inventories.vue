@@ -1,7 +1,6 @@
-<!--
 <template>
   <div class="list row">
-    &lt;!&ndash; Modal
+    <!-- Modal
     <div v-if="isDisplayModal && currentZone">
       <div
         class="modal centered"
@@ -138,9 +137,9 @@
         </div>
       </div>
     </div>
-    &ndash;&gt;
+    -->
 
-    &lt;!&ndash; Creating Inventory Modal &ndash;&gt;
+    <!-- Creating Inventory Modal -->
     <div v-if="isCreatingInventory"
          class="modal centered"
          tabindex="-1"
@@ -204,7 +203,7 @@
       </div>
     </div>
 
-    &lt;!&ndash; Inventory  &ndash;&gt;
+    <!-- Inventory  -->
     <div class="col-md-6">
       <h4>Location List</h4>
       <ag-grid-vue :grid-options="gridOptions"
