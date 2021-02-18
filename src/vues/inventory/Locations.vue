@@ -3,7 +3,7 @@
     <div class="">
       <p>Location list</p>
       <div class="">
-        <li v-for="(location) in locations" v-bind:key="location.id"></li>
+        <li v-for="(location) in locations" v-bind:key="location.id">{{location.id}}</li>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@ export default {
   },
   computed: {
     locations () {
-      return this.$store.state.locations;
+      return this.$store.state.locations.locations;
     }
   }
 }
