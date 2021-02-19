@@ -198,6 +198,7 @@
           </button>
         </div>
       </div>
+
       <div class="mb-3">
         <button @click="openCreateInventoryDialog" class="btn btn-success" type="button">Add Location</button>
       </div>
@@ -212,7 +213,7 @@
                    :columnDefs="columnDefs"
                    :rowData="inventories">
       </ag-grid-vue>
-      &lt;!&ndash;      <ul class="list-group">
+      <!--      <ul class="list-group">
               <li class="list-group-item"
                   :class="{ active: index === currentIndex }"
                   v-for="(product, index) in products"
@@ -220,7 +221,7 @@
                   @click="setActiveProduct(product, index)">
                 {{ product.name }}
               </li>
-            </ul>&ndash;&gt;
+            </ul>-->
     </div>
   </div>
 </template>
@@ -343,13 +344,11 @@ export default {
                 })
                 .catch((e) => {
                   console.log("step 2: ", e);
-                  //TODO: ERROR popup
                 });
             }*/
           })
           .catch((e) => {
             console.log("step 2: ", e);
-            //TODO: ERROR popup
           });
     },
     setActiveInventory(inventory, index) {
@@ -365,7 +364,6 @@ export default {
         })
         .catch((e) => {
           console.log("step 2: ", e);
-          //TODO: ERROR popup
         });*/
     },
     /*deleteZone(zoneId) {
@@ -397,7 +395,6 @@ export default {
         })
         .catch((e) => {
           console.log("step 2: ", e);
-          //TODO: ERROR popup
         });
     },*/
     deleteInventory(inventoryId) {
@@ -413,7 +410,6 @@ export default {
           })
           .catch((e) => {
             console.log("step 2: ", e);
-            //TODO: ERROR popup
           });
     },
     refreshList() {
@@ -437,7 +433,6 @@ export default {
           })
           .catch((e) => {
             console.log("step 2: ", e);
-            //TODO: ERROR popup
           });
     },
     onReset(event) {
@@ -514,4 +509,4 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
-</style>-->
+</style>
