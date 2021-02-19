@@ -9,8 +9,8 @@ class LocationDataService {
         return http.delete("/inventories/" + id);
     }
 
-    createInventory(inventory) {
-        return http.post("/inventories", JSON.stringify(inventory));
+    createLocation(location) {
+        return http.post("/locations", JSON.stringify(location));
     }
 }
 

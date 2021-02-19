@@ -228,7 +228,7 @@
 
 
 <script>
-import InventoryDataService from "@/services/InventoryDataService";
+import InventoryDataService from "@/services/LocationDataService";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import {AgGridVue} from "ag-grid-vue";
@@ -425,7 +425,7 @@ export default {
     confirmCreatingInventory(event) {
       event.preventDefault();
       console.log('ABC:', this.form);
-      InventoryDataService.createInventory(this.form)
+      InventoryDataService.createLocation(this.form)
           .then((response) => {
             console.log("zone created response:", response);
             this.isCreatingInventory = false;
